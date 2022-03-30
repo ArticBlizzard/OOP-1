@@ -35,12 +35,66 @@ T& Vector <T>::operator[](int index) {
 	return arr[index];
 };
 
+struct DinhKe {
+    int val, cost;
+    DinhKe* next;
+};
+
+struct Canh {
+    int DinhDau, DinhCuoi, TrongSo;
+};
+
 class Graph {
-private:
-	
+
+    DinhKe* ThemDinhVaoDanhSachKe(int value, int trongso, DinhKe* head) {
+        DinhKe* newNode = new DinhKe;
+        newNode->val = value;
+        newNode->cost = trongso;
+
+        newNode->next = head;   
+        return newNode;
+    }
+    int N; 
 public:
+    DinhKe** head; // danh sach ke la mang con tro
+
+    // constructor
+    Graph(Canh CacCanh[], int n, int N) {
+        head = new DinhKe * [N]();
+        this->N = N;
+        
+        for (int i = 0; i < N; ++i)
+            head[i] = nullptr;
+      
+        for (unsigned i = 0; i < n; i++) {
+            int DinhDau = CacCanh[i].DinhDau;
+            int DinhCuoi = CacCanh[i].DinhCuoi;
+            int TrongSo = CacCanh[i].TrongSo;
+
+            DinhKe* newNode = ThemDinhVaoDanhSachKe(DinhCuoi, TrongSo, head[DinhDau]);
+
+
+            head[DinhDau] = newNode;
+        }
+    }
+    // destructor
+    ~Graph() {
+        for (int i = 0; i < N; i++)
+            delete[] head[i];
+        delete[] head;
+    }
 	int* BFS();
 };
+
+void CanhKeCuaMotDinh(DinhKe* ptr, int i)
+{
+    while (ptr != nullptr) {
+        cout << "(" << i << ", " << ptr->val
+            << ", " << ptr->cost << ") ";
+        ptr = ptr->next;
+    }
+    cout << endl;
+}
 int* Graph::BFS() {
 	int* res = new int[10];
 	return res;
